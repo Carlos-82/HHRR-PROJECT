@@ -31,6 +31,10 @@ Also allows the employees to knows his actual situacion in the company and reque
 - Personal Information: The user can see his/her personal information and edit it.
 - Contract Information: The user can see his/her contract information.
 
+## Wireframes
+
+https://wireframepro.mockflow.com/editor.jsp?editor=on&publicid=M76ccafdbba3fa4cc47f537b663a537ae1597761258544&perm=Create&projectid=Mfaad04ed7282605e04bee75c47f604001597761305480&ptitle=RRHH&bgcolor=transparent&category=featured#/page/0b1784d94edd45c88caf4b8f0c4ea5d3/sidebar/off
+
 ## Client
 
 ### Routes
