@@ -3,7 +3,7 @@ const router = express.Router();
 const createError = require("http-errors");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const User = require("../models/user");
+const User = require("../models/User");
 
 //HELPER FUNCIONS
 const {
@@ -18,15 +18,15 @@ router.post(
   isNotLoggedIn(),
   validationLoggin(),
   async (req, res, next) => {
-    const { Name, Email, Password } = req.body;
+    const { name, email, password } = req.body;
     try {
       //if the email exists in the DB
-      const emailExists = await User.findOne({ Email }, "Email");
+      const emailExists = await User.findOne({ email }, "Email");
       if (emailExists) return next(createError(400));
       else {
         const salt = bcrypt.genSaltSync(saltRounds);
-        const hashPass = bcrypt.hashSync(Password, salt);
-        const newUser = await User.create({ Name, Email, Password: hashPass });
+        const hashPass = bcrypt.hashSync(password, salt);
+        const newUser = await User.create({ name, email, password: hashPass });
         req.session.currentUser = newUser;
         res.status(200).json(newUser);
       }
@@ -41,14 +41,14 @@ router.post(
   isNotLoggedIn(),
   validationLoggin(),
   async (req, res, next) => {
-    const { Email, Password } = req.body;
+    const { email, password } = req.body;
     try {
-      const user = await User.findOne({ Email });
-      if (!Email) {
+      const user = await User.findOne({ email });
+      if (!email) {
         next(createError(404));
-      } else if (bcrypt.compareSync(Password, user.Password)) {
+      } else if (user && bcrypt.compareSync(password, user.password)) {
         req.session.currentUser = user;
-        req.status(200).json(user);
+        res.status(200).json(user);
         return;
       } else {
         next(createError(401));
@@ -63,6 +63,11 @@ router.post("/logout", isLoggedIn(), (req, res, next) => {
   req.session.destroy();
   res.status(204).send();
   return;
+});
+
+router.get("/me", isLoggedIn(), (req, res, next) => {
+  req.session.currentUser.password = "******";
+  res.json(req.session.currentUser);
 });
 
 module.exports = router;

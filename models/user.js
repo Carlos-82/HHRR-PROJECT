@@ -4,24 +4,24 @@ const validator = require("validator");
 
 const userSchema = new Schema(
   {
-    Name: String,
-    Lastname: String,
+    name: String,
+    lastname: String,
     DNI: String,
     NAF: Number,
-    Genre: { type: String, enum: ["Hombre", "Mujer"] },
-    Adress: String,
-    CP: Number,
-    Birthdate: Date,
-    Admin: { type: Boolean, default: true },
-    Avatar: String,
-    Email: {
+    genre: { type: String, enum: ["Hombre", "Mujer"] },
+    adress: String,
+    cp: Number,
+    birthdate: Date,
+    admin: { type: Boolean, default: true },
+    avatar: String,
+    email: {
       type: String,
       validate: [validator.isEmail, "Please insert a correct Email"],
     },
-    Password: String,
-    Company: { type: Schema.Types.ObjectId, ref: "Empresa" },
-    Contract: [{ type: Schema.Types.ObjectId, ref: "Contrato" }],
-    Absences: [{ type: Schema.Types.ObjectId, ref: "Ausencias" }],
+    password: String,
+    company: { type: Schema.Types.ObjectId, ref: "Empresa" },
+    contract: [{ type: Schema.Types.ObjectId, ref: "Contrato" }],
+    absences: [{ type: Schema.Types.ObjectId, ref: "Ausencias" }],
   },
   {
     timestamps: {
