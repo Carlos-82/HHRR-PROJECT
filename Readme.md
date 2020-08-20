@@ -31,6 +31,19 @@ Also allows the employees to knows his actual situacion in the company and reque
 - Personal Information: The user can see his/her personal information and edit it.
 - Contract Information: The user can see his/her contract information.
 
+## MVP 
+
+- Signup and Login for the admin and the employee
+- Admin: Create and edit the company, create and delete the other users (employees) with the basic information, create and edit the employee contracts, see all the employees and their information
+- Employee: See personal information and edit it, see contract information
+
+## Backlog
+
+- The employee can create, edit and delete the vacations, sickness or permissions and send a request to the admin, who has to validate or deny it.
+- Work time control
+- add a visual calendar for the absences
+- Add a calendar for all the employees absences
+
 ## Wireframes
 
 https://wireframepro.mockflow.com/editor.jsp?editor=on&publicid=M76ccafdbba3fa4cc47f537b663a537ae1597761258544&perm=Create&projectid=Mfaad04ed7282605e04bee75c47f604001597761305480&ptitle=RRHH&bgcolor=transparent&category=featured#/page/0b1784d94edd45c88caf4b8f0c4ea5d3/sidebar/off
