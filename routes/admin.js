@@ -4,8 +4,10 @@ const createError = require("http-errors");
 
 const User = require("../models/User");
 const Company = require("../models/Company");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 const { route } = require("./auth");
-const { Mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 
 //Employees - para obtener todos los trabajadores
 router.get("/employees", (req, res, next) => {
@@ -93,6 +95,7 @@ router.patch("/company/:id", (req, res, next) => {
     res.status(400).json({ message: "The id is no valid" });
     return;
   }
+  const currentUser = req.session.currentUser;
   Company.findByIdAndUpdate(req.params.id, req.body)
     .then(() => {
       res.json({ message: `The Company has been successfully updated` });
@@ -105,26 +108,30 @@ router.patch("/company/:id", (req, res, next) => {
 //creacion empleado
 router.post("/employee/create", (req, res, next) => {
   const currentUser = req.session.currentUser;
+
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const hashPass = bcrypt.hashSync(req.body.password, salt);
   const user = {
     name: req.body.name,
-    lastname: req.body.lastname,
+    lastName: req.body.lastname,
     DNI: req.body.DNI,
     NAF: req.body.NAF,
     genre: req.body.genre,
     address: req.body.address,
     postalCode: req.body.postalCode,
-    birthdate: req.body.birthdate,
+    birthDate: req.body.birthdate,
     admin: false,
     avatar: req.body.avatar,
     email: req.body.email,
-    password: req.body.password,
-    company: currentUser.companyId,
+    password: hashPass,
+    companyId: currentUser.companyId,
   };
 
+  console.log(user);
   User.create(user)
     .then((newUser) => {
       Company.findByIdAndUpdate(currentUser.companyId, {
-        $pull: { userId: newUser._id },
+        $push: { userIds: newUser._id },
       })
         .then(() => {
           res.status(200).json({
@@ -135,6 +142,58 @@ router.post("/employee/create", (req, res, next) => {
         .catch((err) => {
           res.json(err);
         });
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+//informacion del trabajador
+router.get("/employee/:employeeId", (req, res, next) => {
+  const currentUser = req.session.currentUser;
+  const employeeId = req.params.employeeId;
+
+  User.findById(employeeId)
+    .then((theEmployee) => {
+      if (theEmployee.companyId.equals(currentUser.companyId)) {
+        res.json(theEmployee);
+      } else {
+        res.json({ message: "it's not an employee of your company" });
+      }
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+//Editar el trabajador
+router.patch("/employee/:id/editemployee", (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400).json({ message: "The id is no valid" });
+    return;
+  }
+  const currentUser = req.session.currentUser;
+  User.findByIdAndUpdate(req.params.id, req.body)
+    .then(() => {
+      res.json({ message: `The Employee has been successfully updated` });
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+//Borrar trabajador
+router.delete("/employee/:id/", (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400).json({ message: "Specified id is not valid" });
+    return;
+  }
+
+  const currentUser = req.session.currentUser;
+
+  User.findByIdAndRemove(req.params._id)
+    .then(() => {
+      res.json({ message: "The employee has been removed successfully" });
     })
     .catch((err) => {
       res.json(err);
