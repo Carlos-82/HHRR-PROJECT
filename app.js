@@ -12,6 +12,7 @@ const cors = require("cors");
 
 const auth = require("./routes/auth");
 const admin = require("./routes/admin");
+const { isAdmin } = require("./helpers/middlewares");
 
 // MONGOOSE CONNECTION
 mongoose
@@ -19,6 +20,7 @@ mongoose
     useUnifiedTopology: true,
     keepAlive: true,
     useNewUrlParser: true,
+    useFindAndModify: false,
   })
   .then(() => console.log(`Connected to database`))
   .catch((err) => console.error(err));
@@ -66,7 +68,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // ROUTER MIDDLEWARE
 app.use("/auth", auth);
-app.use("/admin", admin);
+app.use("/admin", isAdmin(), admin);
 
 // ERROR HANDLING
 // catch 404 and forward to error handler

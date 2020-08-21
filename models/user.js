@@ -19,7 +19,7 @@ const userSchema = new Schema(
       validate: [validator.isEmail, "Please insert a correct Email"],
     },
     password: String,
-    company: { type: Schema.Types.ObjectId, ref: "Empresa" },
+    companyId: { type: Schema.Types.ObjectId, ref: "Company" },
     contract: [{ type: Schema.Types.ObjectId, ref: "Contrato" }],
     absences: [{ type: Schema.Types.ObjectId, ref: "Ausencias" }],
   },

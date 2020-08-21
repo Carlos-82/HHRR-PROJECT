@@ -5,6 +5,11 @@ exports.isLoggedIn = () => (req, res, next) => {
   else next(createError(401));
 };
 
+exports.isAdmin = () => (req, res, next) => {
+  if (req.session.currentUser.admin) next();
+  else next(createError(401));
+};
+
 exports.isNotLoggedIn = () => (req, res, next) => {
   if (!req.session.currentUser) next();
   else next(createError(403));
