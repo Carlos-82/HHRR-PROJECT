@@ -4,6 +4,7 @@ const createError = require("http-errors");
 
 const User = require("../models/User");
 const Company = require("../models/Company");
+const Contract = require("../models/Contract");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { route } = require("./auth");
@@ -41,8 +42,8 @@ router.get("/company", (req, res, next) => {
   User.findById(currentUser._id)
     .then((userFresquito) => {
       Company.findOne({ _id: userFresquito.companyId })
-        .then((allEmployees) => {
-          res.json(allEmployees);
+        .then((company) => {
+          res.json(company);
         })
         .catch((err) => {
           res.json(err);
@@ -120,7 +121,7 @@ router.post("/employee/create", (req, res, next) => {
     address: req.body.address,
     postalCode: req.body.postalCode,
     birthDate: req.body.birthdate,
-    admin: false,
+    admin: req.body.admin,
     avatar: req.body.avatar,
     email: req.body.email,
     password: hashPass,
@@ -182,7 +183,7 @@ router.patch("/employee/:id/editemployee", (req, res, next) => {
     });
 });
 
-//Borrar trabajador
+//Borrar trabajador - LO BORRA PERO CREO QUE PUEDE BORRARLO CUALQUIERA QUE SEA ADMIN SI TIENE EL ID
 router.delete("/employee/:id/", (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
     res.status(400).json({ message: "Specified id is not valid" });
@@ -190,10 +191,85 @@ router.delete("/employee/:id/", (req, res, next) => {
   }
 
   const currentUser = req.session.currentUser;
+  const userDelete = req.params;
 
-  User.findByIdAndRemove(req.params._id)
+  User.findByIdAndRemove(userDelete.id)
     .then(() => {
-      res.json({ message: "The employee has been removed successfully" });
+      if (userDelete.companyId.equals(currentUser.companyId)) {
+        res.json({ message: "The employee has been removed successfully" });
+      } else {
+        res.json({ message: "it's not an employee of your company" });
+      }
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+//Obtener los contratos del trabajador
+router.get("//employee/employeeId/contract", (req, res, next) => {
+  const employeeId = req.params.employeeId;
+  User.findOne(employeeId)
+    .populate("userIds")
+    .then((allContracts) => {
+      res.json(allContracts);
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+//Crear contrato trabajador
+router.post("/employee/:id/contract/create", (req, res, next) => {
+  const currentUser = req.session.currentUser;
+  const employeeId = req.params.id;
+  const contract = {
+    startDate: req.body.startDate,
+    endDate: req.body.endDate,
+    contractType: req.body.contractType,
+    contractCode: req.body.contractCode,
+    category: req.body.genre,
+    jobRole: req.body.jobRole,
+    salary: req.body.salary,
+    bonus: req.body.bonus,
+    educationLevel: req.body.educationLevel,
+    vacationDays: req.body.vacationDays,
+    aditionalClauses: req.body.aditionalClauses,
+    user: employeeId,
+  };
+
+  console.log(contract);
+  Contract.create(contract)
+    .then((newContract) => {
+      User.findByIdAndUpdate(employeeId, {
+        $push: { contract: newContract._id },
+      })
+        .then(() => {
+          res.status(200).json({
+            message: "Added contract",
+            contract: newContract,
+          });
+        })
+        .catch((err) => {
+          res.json(err);
+        });
+    })
+    .catch((err) => {
+      res.json(err);
+    });
+});
+
+//Obtener informacion de un contrato
+router.get("/employee/:id/contract/:id", (req, res, next) => {
+  User.findById(user._id)
+    .then((user) => {
+      Contract.findById({ _id: user.contract._id })
+        .then((contract) => {
+          res.json(contract);
+        })
+        .catch((err) => {
+          res.json(err);
+        });
     })
     .catch((err) => {
       res.json(err);

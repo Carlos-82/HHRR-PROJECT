@@ -3,18 +3,18 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
-    StartDate: Date,
-    EndDate: Date,
-    ContractType: String,
-    ContractCode: Number,
-    Category: String,
-    JobRole: String,
-    Salary: String,
-    Bonus: String,
-    Educacion: String,
-    VacationDays: Number,
-    AditionalClauses: String,
-    User: [{ type: Schema.Types.ObjectId, ref: "Usuario" }],
+    startDate: Date,
+    endDate: Date,
+    contractType: String,
+    contractCode: Number,
+    category: String,
+    jobRole: String,
+    salary: String,
+    bonus: String,
+    educationLevel: String,
+    vacationDays: Number,
+    aditionalClauses: String,
+    user: { type: Schema.Types.ObjectId, ref: "Usuario" },
   },
   {
     timestamps: {
