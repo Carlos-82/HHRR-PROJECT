@@ -14,7 +14,7 @@ const userSchema = new Schema(
     educationLevel: String,
     vacationDays: Number,
     aditionalClauses: String,
-    user: { type: Schema.Types.ObjectId, ref: "Usuario" },
+    user: { type: Schema.Types.ObjectId, ref: "user" },
   },
   {
     timestamps: {

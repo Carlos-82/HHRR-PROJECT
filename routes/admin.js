@@ -207,12 +207,12 @@ router.delete("/employee/:id/", (req, res, next) => {
 });
 
 //Obtener los contratos del trabajador
-router.get("//employee/employeeId/contract", (req, res, next) => {
-  const employeeId = req.params.employeeId;
-  User.findOne(employeeId)
-    .populate("userIds")
-    .then((allContracts) => {
-      res.json(allContracts);
+router.get("/employee/:id/contract", (req, res, next) => {
+  const employee = req.params;
+  User.findById(employee.id)
+    .populate("contract")
+    .then((userWhitContrats) => {
+      res.json(userWhitContrats);
     })
     .catch((err) => {
       res.json(err);
@@ -238,7 +238,6 @@ router.post("/employee/:id/contract/create", (req, res, next) => {
     user: employeeId,
   };
 
-  console.log(contract);
   Contract.create(contract)
     .then((newContract) => {
       User.findByIdAndUpdate(employeeId, {
@@ -260,12 +259,14 @@ router.post("/employee/:id/contract/create", (req, res, next) => {
 });
 
 //Obtener informacion de un contrato
-router.get("/employee/:id/contract/:id", (req, res, next) => {
-  User.findById(user._id)
-    .then((user) => {
-      Contract.findById({ _id: user.contract._id })
+router.get("/employee/:employeeId/contract/:contractId", (req, res, next) => {
+  const { employeeId, contractId } = req.params;
+
+  User.findById(employeeId)
+    .then(() => {
+      Contract.findById(contractId)
         .then((contract) => {
-          res.json(contract);
+          res.json({ message: "Your contract", contract });
         })
         .catch((err) => {
           res.json(err);
@@ -275,5 +276,64 @@ router.get("/employee/:id/contract/:id", (req, res, next) => {
       res.json(err);
     });
 });
+
+//editar contrato
+router.patch(
+  "/employee/:employeeId/contract/:contractId/editContract",
+  (req, res, next) => {
+    const { employeeId, contractId } = req.params;
+    const currentUser = req.session.currentUser;
+
+    if (!mongoose.Types.ObjectId.isValid(contractId)) {
+      res.status(400).json({ message: "The id is no valid" });
+      return;
+    }
+
+    User.findById(employeeId)
+      .then(() => {
+        Contract.findByIdAndUpdate(contractId, req.body)
+          .then((updatedContract) => {
+            res.json({
+              message: `The Contract has been successfully updated`,
+              updatedContract,
+            });
+          })
+          .catch((err) => {
+            res.json(err);
+          });
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  }
+);
+
+//borrar un contrato
+router.delete(
+  "/employee/:employeeId/contract/:contractId",
+  (req, res, next) => {
+    const { currentUser } = req.session;
+    const { contractId, employeeId } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(contractId)) {
+      res.status(400).json({ message: "Specified id is not valid" });
+      return;
+    }
+
+    Contract.findByIdAndRemove(contractId)
+      .then(() => {
+        User.findByIdAndUpdate(employeeId, { $pull: { contract: contractId } })
+          .then(() => {
+            res.json({ message: `Contract ${contractId} deleted` });
+          })
+          .catch((err) => {
+            res.json(err);
+          });
+      })
+      .catch((err) => {
+        res.json(err);
+      });
+  }
+);
 
 module.exports = router;

@@ -12,6 +12,7 @@ const cors = require("cors");
 
 const auth = require("./routes/auth");
 const admin = require("./routes/admin");
+const user = require("./routes/employee");
 const { isAdmin } = require("./helpers/middlewares");
 
 // MONGOOSE CONNECTION
@@ -69,6 +70,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // ROUTER MIDDLEWARE
 app.use("/auth", auth);
 app.use("/admin", isAdmin(), admin);
+app.use("/user", user);
 
 // ERROR HANDLING
 // catch 404 and forward to error handler

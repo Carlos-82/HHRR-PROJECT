@@ -20,8 +20,8 @@ const userSchema = new Schema(
     },
     password: String,
     companyId: { type: Schema.Types.ObjectId, ref: "Company" },
-    contract: [{ type: Schema.Types.ObjectId, ref: "Contrato" }],
-    absences: [{ type: Schema.Types.ObjectId, ref: "Ausencias" }],
+    contract: [{ type: Schema.Types.ObjectId, ref: "Contract" }],
+    absences: [{ type: Schema.Types.ObjectId, ref: "Absences" }],
   },
   {
     timestamps: {
