@@ -175,8 +175,11 @@ router.patch("/employee/:id/editemployee", (req, res, next) => {
   }
   const currentUser = req.session.currentUser;
   User.findByIdAndUpdate(req.params.id, req.body)
-    .then(() => {
-      res.json({ message: `The Employee has been successfully updated` });
+    .then((user) => {
+      res.json({
+        message: `The Employee has been successfully updated`,
+        user,
+      });
     })
     .catch((err) => {
       res.json(err);

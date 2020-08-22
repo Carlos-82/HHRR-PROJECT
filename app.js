@@ -12,8 +12,9 @@ const cors = require("cors");
 
 const auth = require("./routes/auth");
 const admin = require("./routes/admin");
-const user = require("./routes/employee");
+const user = require("./routes/employeeRoutes");
 const { isAdmin } = require("./helpers/middlewares");
+const app = require("./appexpress");
 
 // MONGOOSE CONNECTION
 mongoose
@@ -25,9 +26,6 @@ mongoose
   })
   .then(() => console.log(`Connected to database`))
   .catch((err) => console.error(err));
-
-// EXPRESS SERVER INSTANCE
-const app = express();
 
 // CORS MIDDLEWARE SETUP
 app.use(
