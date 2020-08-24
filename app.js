@@ -11,6 +11,10 @@ const MongoStore = require("connect-mongo")(session);
 const cors = require("cors");
 
 const auth = require("./routes/auth");
+const admin = require("./routes/admin");
+const user = require("./routes/employeeRoutes");
+const { isAdmin } = require("./helpers/middlewares");
+const app = require("./appexpress");
 
 // MONGOOSE CONNECTION
 mongoose
@@ -18,12 +22,10 @@ mongoose
     useUnifiedTopology: true,
     keepAlive: true,
     useNewUrlParser: true,
+    useFindAndModify: false,
   })
   .then(() => console.log(`Connected to database`))
   .catch((err) => console.error(err));
-
-// EXPRESS SERVER INSTANCE
-const app = express();
 
 // CORS MIDDLEWARE SETUP
 app.use(
@@ -65,6 +67,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // ROUTER MIDDLEWARE
 app.use("/auth", auth);
+app.use("/admin", isAdmin(), admin);
+app.use("/user", user);
 
 // ERROR HANDLING
 // catch 404 and forward to error handler
