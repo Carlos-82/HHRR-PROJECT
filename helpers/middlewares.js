@@ -1,4 +1,5 @@
 const createError = require("http-errors");
+const User = require("../models/User");
 
 exports.isLoggedIn = () => (req, res, next) => {
   if (req.session.currentUser) next();
@@ -20,4 +21,21 @@ exports.validationLoggin = () => (req, res, next) => {
 
   if (!email || !password) next(createError(400));
   else next();
+};
+
+exports.hasCompany = () => (req, res, next) => {
+  const currentUser = req.session.currentUser;
+  User.findById(currentUser._id)
+    .then((user) => {
+      console.log({ user });
+      if (user.companyId) {
+        next(
+          createError(409, {
+            message: "You already has company",
+          })
+        );
+      }
+      next();
+    })
+    .catch((err) => console.log("entra aki") || next(createError(500, err)));
 };

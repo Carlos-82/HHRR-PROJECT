@@ -18,7 +18,7 @@ router.post(
   isNotLoggedIn(),
   validationLoggin(),
   async (req, res, next) => {
-    const { name, email, password } = req.body;
+    const { firstName, email, password } = req.body;
     try {
       //if the email exists in the DB
       const emailExists = await User.findOne({ email }, "Email");
@@ -26,7 +26,11 @@ router.post(
       else {
         const salt = bcrypt.genSaltSync(saltRounds);
         const hashPass = bcrypt.hashSync(password, salt);
-        const newUser = await User.create({ name, email, password: hashPass });
+        const newUser = await User.create({
+          firstName,
+          email,
+          password: hashPass,
+        });
         req.session.currentUser = newUser;
         res.status(200).json(newUser);
       }

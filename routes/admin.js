@@ -9,6 +9,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { route } = require("./auth");
 const mongoose = require("mongoose");
+const { hasCompany } = require("../helpers/middlewares");
 
 //Employees - para obtener todos los trabajadores
 router.get("/employees", (req, res, next) => {
@@ -40,8 +41,8 @@ router.get("/company", (req, res, next) => {
   const currentUser = req.session.currentUser;
 
   User.findById(currentUser._id)
-    .then((userFresquito) => {
-      Company.findOne({ _id: userFresquito.companyId })
+    .then((userAdmin) => {
+      Company.findOne({ _id: userAdmin.companyId })
         .then((company) => {
           res.json(company);
         })
@@ -55,7 +56,7 @@ router.get("/company", (req, res, next) => {
 });
 
 //Creacion de la empresa
-router.post("/company/create", (req, res, next) => {
+router.post("/company/create", hasCompany(), (req, res, next) => {
   const currentUser = req.session.currentUser;
   const company = {
     registerName: req.body.registerName,
@@ -64,12 +65,14 @@ router.post("/company/create", (req, res, next) => {
     CCC: req.body.CCC,
     address: req.body.address,
     postalCode: req.body.postalCode,
+    country: req.body.country,
     registerDate: req.body.registerDate,
-    legalPersonality: req.body.legalPersonality,
+    legalPersonality: req.body.legalPersonality.toLowerCase(),
     colectiveAgreement: req.body.colectiveAgreement,
     mutualInsurance: req.body.mutualInsurance,
     userIds: [currentUser._id],
   };
+
   Company.create(company)
     .then((newCompany) => {
       User.findByIdAndUpdate(currentUser._id, {
@@ -93,7 +96,7 @@ router.post("/company/create", (req, res, next) => {
 //Editar la empresa
 router.patch("/company/:id", (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-    res.status(400).json({ message: "The id is no valid" });
+    res.status(400).json({ message: "The id is not valid" });
     return;
   }
   const currentUser = req.session.currentUser;
@@ -113,13 +116,15 @@ router.post("/employee/create", (req, res, next) => {
   const salt = bcrypt.genSaltSync(saltRounds);
   const hashPass = bcrypt.hashSync(req.body.password, salt);
   const user = {
-    name: req.body.name,
+    firstName: req.body.firstName,
     lastName: req.body.lastname,
     DNI: req.body.DNI,
     NAF: req.body.NAF,
+    nationality: req.body.nationality,
     genre: req.body.genre,
     address: req.body.address,
     postalCode: req.body.postalCode,
+    country: req.body.country,
     birthDate: req.body.birthdate,
     admin: req.body.admin,
     avatar: req.body.avatar,

@@ -9,6 +9,7 @@ const userSchema = new Schema(
     CCC: Number,
     address: String,
     postalCode: Number,
+    country: String,
     registerDate: Date,
     legalPersonality: { type: String, enum: ["fisica", "juridica"] },
     userIds: [{ type: Schema.Types.ObjectId, ref: "User" }],

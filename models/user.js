@@ -4,13 +4,15 @@ const validator = require("validator");
 
 const userSchema = new Schema(
   {
-    name: String,
+    firstName: String,
     lastName: String,
     DNI: String,
     NAF: Number,
-    genre: { type: String, enum: ["Hombre", "Mujer"] },
-    adress: String,
+    nationality: String,
+    genre: { type: String, enum: ["Male", "Female"] },
+    address: String,
     postalCode: Number,
+    country: String,
     birthDate: Date,
     admin: { type: Boolean, default: true },
     avatar: String,
