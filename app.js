@@ -32,7 +32,7 @@ mongoose
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:3000", "https://mi-proyecto.web.app"],
+    origin: ["http://localhost:3000", "https://hhrr-app.web.app"],
   })
 );
 // app.use((req, res, next) => {
