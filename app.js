@@ -34,6 +34,13 @@ app.use(
     origin: [process.env.PUBLIC_DOMAIN],
   })
 );
+
+app.use(
+  cors({
+    credentials: true,
+    origin: ["http://localhost:3000", "https://mi-proyecto.web.app"],
+  })
+);
 // app.use((req, res, next) => {
 //   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 //   res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, OPTIONS, DELETE');
