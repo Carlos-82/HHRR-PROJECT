@@ -8,13 +8,15 @@ const userSchema = new Schema(
     contractType: String,
     contractCode: Number,
     category: String,
+    workDay: String,
+    workHours: Number,
     jobRole: String,
     salary: String,
     bonus: String,
     educationLevel: String,
     vacationDays: Number,
     aditionalClauses: String,
-    user: { type: Schema.Types.ObjectId, ref: "user" },
+    user: { type: Schema.Types.ObjectId, ref: "User" },
   },
   {
     timestamps: {

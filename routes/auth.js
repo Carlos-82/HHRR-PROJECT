@@ -11,6 +11,7 @@ const {
   isNotLoggedIn,
   validationLoggin,
 } = require("../helpers/middlewares");
+const { findById } = require("../models/User");
 
 //POST '/SIGNUP'
 router.post(
@@ -71,7 +72,10 @@ router.post("/logout", isLoggedIn(), (req, res, next) => {
 
 router.get("/me", isLoggedIn(), (req, res, next) => {
   req.session.currentUser.password = "******";
-  res.json(req.session.currentUser);
+  const currentUser = req.session.currentUser;
+  User.findById(currentUser._id).then((user) => {
+    res.json(user);
+  });
 });
 
 module.exports = router;

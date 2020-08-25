@@ -19,9 +19,8 @@ router.get("/employees", (req, res, next) => {
     res.status(400).json({ message: "No tienes acceso Cojones" });
   } else {
     User.findById(currentUser._id)
-      .then((userFresquito) => {
-        //console.log({ userFresquito });
-        Company.findOne({ _id: userFresquito.companyId })
+      .then((newUSer) => {
+        Company.findOne({ _id: newUSer.companyId })
           .populate("userIds")
           .then((allEmployees) => {
             res.json(allEmployees);
@@ -44,6 +43,7 @@ router.get("/company", (req, res, next) => {
     .then((userAdmin) => {
       Company.findOne({ _id: userAdmin.companyId })
         .then((company) => {
+          console.log("hola", company);
           res.json(company);
         })
         .catch((err) => {
@@ -236,7 +236,9 @@ router.post("/employee/:id/contract/create", (req, res, next) => {
     endDate: req.body.endDate,
     contractType: req.body.contractType,
     contractCode: req.body.contractCode,
-    category: req.body.genre,
+    workDay: req.body.workDay,
+    workHours: req.body.workHours,
+    category: req.body.category,
     jobRole: req.body.jobRole,
     salary: req.body.salary,
     bonus: req.body.bonus,
@@ -273,6 +275,7 @@ router.get("/employee/:employeeId/contract/:contractId", (req, res, next) => {
   User.findById(employeeId)
     .then(() => {
       Contract.findById(contractId)
+        .populate("user")
         .then((contract) => {
           res.json({ message: "Your contract", contract });
         })
