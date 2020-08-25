@@ -28,12 +28,6 @@ mongoose
   .catch((err) => console.error(err));
 
 // CORS MIDDLEWARE SETUP
-app.use(
-  cors({
-    credentials: true,
-    origin: [process.env.PUBLIC_DOMAIN],
-  })
-);
 
 app.use(
   cors({
