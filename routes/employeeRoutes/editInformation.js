@@ -5,7 +5,7 @@ const createError = require("http-errors");
 const User = require("../../models/User");
 
 //informacion del contrato
-router.get("/user/:userId/editProfile", (req, res, next) => {
+router.get("/:userId/editProfile", (req, res, next) => {
   const { userId } = req.params;
 
   User.findByIdAndUpdate(userId, req.body)

@@ -5,7 +5,7 @@ const createError = require("http-errors");
 const User = require("../../models/User");
 
 //informacion del trabajador
-router.get("/user/:userId", (req, res, next) => {
+router.get("/:userId", (req, res, next) => {
   const { userId } = req.params;
 
   User.findById(userId)

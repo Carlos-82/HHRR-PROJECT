@@ -76,6 +76,9 @@ app.use("/user", contractInformation);
 app.use("/user", editInformation);
 app.use("/user", userInformation);
 app.use("/admin", isAdmin(), admin);
+app.use((req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
 
 // ERROR HANDLING
 // catch 404 and forward to error handler
