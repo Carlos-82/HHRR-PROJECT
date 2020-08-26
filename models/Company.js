@@ -7,7 +7,7 @@ const userSchema = new Schema(
     tradeName: String,
     CIF: String,
     CCC: Number,
-    address: String,
+    companyAddress: String,
     postalCode: Number,
     country: String,
     registerDate: Date,

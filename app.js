@@ -10,10 +10,14 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo")(session);
 const cors = require("cors");
 
+const { isAdmin } = require("./helpers/middlewares");
 const auth = require("./routes/auth");
 const admin = require("./routes/admin");
-const user = require("./routes/employeeRoutes");
-const { isAdmin } = require("./helpers/middlewares");
+const contractInformation = require("./routes/employeeRoutes/contractInformation");
+const editInformation = require("./routes/employeeRoutes/editInformation");
+const userInformation = require("./routes/employeeRoutes/userInformation");
+
+const user = require("./routes/employeeRoutes/index");
 const app = require("./appexpress");
 
 // MONGOOSE CONNECTION
@@ -68,8 +72,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // ROUTER MIDDLEWARE
 app.use("/auth", auth);
+app.use("/user", contractInformation);
+app.use("/user", editInformation);
+app.use("/user", userInformation);
 app.use("/admin", isAdmin(), admin);
-app.use("/user", user);
 
 // ERROR HANDLING
 // catch 404 and forward to error handler

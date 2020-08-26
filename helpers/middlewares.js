@@ -27,7 +27,6 @@ exports.hasCompany = () => (req, res, next) => {
   const currentUser = req.session.currentUser;
   User.findById(currentUser._id)
     .then((user) => {
-      console.log({ user });
       if (user.companyId) {
         next(
           createError(409, {
@@ -37,5 +36,5 @@ exports.hasCompany = () => (req, res, next) => {
       }
       next();
     })
-    .catch((err) => console.log("entra aki") || next(createError(500, err)));
+    .catch((err) => next(createError(500, err)));
 };

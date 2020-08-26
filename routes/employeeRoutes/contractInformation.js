@@ -6,7 +6,7 @@ const User = require("../../models/User");
 const Contract = require("../../models/Contract");
 
 //informacion del contrato
-router.get("/user/:userId/contract", (req, res, next) => {
+router.get("/:userId/contracto", (req, res, next) => {
   const { userId } = req.params;
 
   User.findById(userId)

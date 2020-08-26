@@ -72,10 +72,7 @@ router.post("/logout", isLoggedIn(), (req, res, next) => {
 
 router.get("/me", isLoggedIn(), (req, res, next) => {
   req.session.currentUser.password = "******";
-  const currentUser = req.session.currentUser;
-  User.findById(currentUser._id).then((user) => {
-    res.json(user);
-  });
+  res.json(req.session.currentUser);
 });
 
 module.exports = router;

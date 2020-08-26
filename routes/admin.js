@@ -43,7 +43,6 @@ router.get("/company", (req, res, next) => {
     .then((userAdmin) => {
       Company.findOne({ _id: userAdmin.companyId })
         .then((company) => {
-          console.log("hola", company);
           res.json(company);
         })
         .catch((err) => {
@@ -63,7 +62,7 @@ router.post("/company/create", hasCompany(), (req, res, next) => {
     tradeName: req.body.tradeName,
     CIF: req.body.CIF,
     CCC: req.body.CCC,
-    address: req.body.address,
+    companyAddress: req.body.companyAddress,
     postalCode: req.body.postalCode,
     country: req.body.country,
     registerDate: req.body.registerDate,
@@ -179,6 +178,7 @@ router.patch("/employee/:id/editemployee", (req, res, next) => {
     return;
   }
   const currentUser = req.session.currentUser;
+  console.log(req.body);
   User.findByIdAndUpdate(req.params.id, req.body)
     .then((user) => {
       res.json({
