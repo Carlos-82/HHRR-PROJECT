@@ -44,6 +44,12 @@ Also allows the employees to knows his actual situacion in the company and reque
 - add a visual calendar for the absences
 - Add a calendar for all the employees absences
 
+## Links
+
+Client Service: https://github.com/Carlos-82/HHRR-PROJECT-CLIENT
+Server Service: https://github.com/Carlos-82/HHRR-PROJECT
+Link to the App: https://hhrr-app.herokuapp.com/
+
 ## Wireframes
 
 https://wireframepro.mockflow.com/editor.jsp?editor=on&publicid=M76ccafdbba3fa4cc47f537b663a537ae1597761258544&perm=Create&projectid=Mfaad04ed7282605e04bee75c47f604001597761305480&ptitle=RRHH&bgcolor=transparent&category=featured#/page/0b1784d94edd45c88caf4b8f0c4ea5d3/sidebar/off
