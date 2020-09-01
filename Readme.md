@@ -46,9 +46,9 @@ Also allows the employees to knows his actual situacion in the company and reque
 
 ## Links
 
-Client Service: https://github.com/Carlos-82/HHRR-PROJECT-CLIENT
-Server Service: https://github.com/Carlos-82/HHRR-PROJECT
-Link to the App: https://hhrr-app.herokuapp.com/
+- Client Service: https://github.com/Carlos-82/HHRR-PROJECT-CLIENT
+- Server Service: https://github.com/Carlos-82/HHRR-PROJECT
+- Link to the App: https://hhrr-app.herokuapp.com/
 
 ## Wireframes
 
